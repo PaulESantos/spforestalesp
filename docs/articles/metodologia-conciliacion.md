@@ -18,9 +18,9 @@ infraespecífico que debe quedar fuera de la búsqueda.
 ``` r
 
 library(spforestalesp)
-data("serfor_modelo")
-data("referencia_modelo")
-data("resultado_modelo_esperado")
+data("serfor_modelo", package = "spforestalesp")
+data("referencia_modelo", package = "spforestalesp")
+data("resultado_modelo_esperado", package = "spforestalesp")
 
 resultado <- conciliar_especies_serfor(serfor_modelo, referencia_modelo)
 resultado[c("numero", "estado_coincidencia", "metodo_coincidencia")]
