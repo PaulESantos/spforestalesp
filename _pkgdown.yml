@@ -1,19 +1,4 @@
-destination: docs
 url: https://paulesantos.github.io/spforestalesp/
-
 template:
   bootstrap: 5
 
-reference:
-  - title: Datos
-    contents:
-      - lista_oficial_especies_forestales
-      - datos_modelo_conciliacion
-  - title: Conciliación taxonómica
-    contents:
-      - conciliar_especies_serfor
-
-articles:
-  - title: Metodología
-    contents:
-      - metodologia-conciliacion

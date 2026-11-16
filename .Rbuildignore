@@ -7,3 +7,8 @@
 ^results$
 ^docs$
 ^_pkgdown\.yml$
+^data-raw$
+^raw-data$
+^\.github$
+^codecov\.yml$
+^pkgdown$
