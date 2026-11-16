@@ -1,0 +1,26 @@
+Package: especiesforestalesPE
+Type: Package
+Title: Lista Oficial de Especies Forestales del Peru (SERFOR 2023)
+Version: 0.1.0
+Authors@R: 
+    person("Nombre", "Apellido", email = "correo@ejemplo.com",
+           role = c("aut", "cre"))
+Description: Pone a disposicion, como un conjunto de datos ordenado, la
+    'Lista Oficial de Especies Forestales' del Peru, aprobada por el Servicio
+    Nacional Forestal y de Fauna Silvestre (SERFOR) mediante la Resolucion de
+    Direccion Ejecutiva N° D000163-2023-MIDAGRI-SERFOR-DE del 18 de julio de
+    2023, que deja sin efecto la lista aprobada en 2019. Contiene 734 especies
+    con su nombre cientifico (incluyendo autoria), familia botanica, nombres
+    comunes y nombre comercial de la madera aserrada. La lista busca
+    estandarizar las denominaciones de las especies forestales para su registro
+    en el Sistema Nacional de Informacion Forestal y de Fauna Silvestre
+    (SNIFFS) y para la gestion de los recursos forestales a nivel nacional.
+    Incluye ademas una funcion para identificar los generos que la norma
+    permite considerar de forma excepcional en el control forestal del
+    transporte de productos maderables transformados.
+License: CC0
+Encoding: UTF-8
+Language: es
+LazyData: true
+Depends: R (>= 3.5.0)
+URL: https://www.serfor.gob.pe

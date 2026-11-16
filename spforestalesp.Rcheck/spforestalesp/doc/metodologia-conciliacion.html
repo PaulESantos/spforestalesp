@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Metodología de conciliación taxonómica</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Metodología de conciliación taxonómica</h1>
+
+
+
+<p><code>conciliar_especies_serfor()</code> compara cada entrada con una
+referencia de especies. Si no se proporciona <code>target_df</code>, usa
+los nombres de <code>wcvpdata</code> (versión 0.7.0 o posterior). Cada
+registro de entrada conserva una fila de salida, incluso si el nombre se
+repite.</p>
+<div id="datos-modelo-reproducibles" class="section level2">
+<h2>Datos modelo reproducibles</h2>
+<p>El paquete incluye tres tibbles sintéticos:
+<code>serfor_modelo</code> (12 entradas), <code>referencia_modelo</code>
+(14 registros de referencia) y <code>resultado_modelo_esperado</code>
+(estados y métodos esperados). Cubren binomios exactos, género difuso,
+cambio de terminación, epíteto difuso, empates, duplicados, sinónimos,
+nombres sin coincidencia y un registro infraespecífico que debe quedar
+fuera de la búsqueda.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(spforestalesp)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;serfor_modelo&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;referencia_modelo&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;resultado_modelo_esperado&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>resultado <span class="ot">&lt;-</span> <span class="fu">conciliar_especies_serfor</span>(serfor_modelo, referencia_modelo)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>resultado[<span class="fu">c</span>(<span class="st">&quot;numero&quot;</span>, <span class="st">&quot;estado_coincidencia&quot;</span>, <span class="st">&quot;metodo_coincidencia&quot;</span>)]</span></code></pre></div>
+<pre><code>## # A tibble: 12 × 3
+##    numero estado_coincidencia metodo_coincidencia         
+##     &lt;int&gt; &lt;chr&gt;               &lt;chr&gt;                       
+##  1      1 coincidencia        binomio_exacto              
+##  2      2 coincidencia        binomio_exacto              
+##  3      3 coincidencia        genero_difuso_epiteto_exacto
+##  4      4 coincidencia        variante_terminacion        
+##  5      5 coincidencia        epiteto_difuso              
+##  6      6 sin_coincidencia    &lt;NA&gt;                        
+##  7      7 ambiguo             genero_difuso               
+##  8      8 ambiguo             epiteto_difuso              
+##  9      9 sin_coincidencia    &lt;NA&gt;                        
+## 10     10 ambiguo             binomio_exacto              
+## 11     11 coincidencia        binomio_exacto              
+## 12     12 coincidencia        binomio_exacto</code></pre>
+<p>La comparación con la tabla esperada permite detectar cambios de
+comportamiento:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>columnas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;estado_coincidencia&quot;</span>, <span class="st">&quot;metodo_coincidencia&quot;</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>              <span class="st">&quot;id_referencia&quot;</span>, <span class="st">&quot;nombre_aceptado&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">vapply</span>(columnas, <span class="cf">function</span>(columna) {</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">identical</span>(resultado[[columna]], resultado_modelo_esperado[[columna]])</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>}, <span class="fu">logical</span>(<span class="dv">1</span>)))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Estos nombres y autorías de prueba son sintéticos; no representan una
+propuesta de cambio a la lista oficial de SERFOR.</p>
+</div>
+<div id="preparación-de-la-referencia" class="section level2">
+<h2>Preparación de la referencia</h2>
+<p>La referencia debe tener <code>genus</code> y <code>species</code>.
+Se eliminan las filas sin estos campos. Si hay <code>taxon_rank</code>,
+se conservan solo las filas <code>Species</code>; si hay
+<code>infraspecific_rank</code>, se descartan los registros
+infraespecíficos. La función quita espacios iniciales y finales de
+<code>genus</code> y <code>species</code> en la referencia.</p>
+</div>
+<div id="orden-de-búsqueda" class="section level2">
+<h2>Orden de búsqueda</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Binomio exacto:</strong> compara género y epíteto
+específicos.</li>
+<li><strong>Género difuso con epíteto exacto:</strong> usa la menor
+distancia dentro de <code>max_dist</code>. Un empate entre géneros se
+resuelve solo si uno contiene el epíteto exacto.</li>
+<li><strong>Variante de terminación:</strong> compara la raíz tras
+quitar <code>ae</code>, <code>is</code>, <code>um</code>,
+<code>us</code>, <code>a</code> o <code>i</code>; la raíz debe apuntar a
+una única especie dentro del género.</li>
+<li><strong>Epíteto difuso:</strong> compara solo con especies del
+género resuelto. Un epíteto de hasta siete caracteres requiere un
+candidato de igual longitud.</li>
+</ol>
+<p>Las etapas difusas usan
+<code>fuzzyjoin::stringdist_inner_join()</code>, con distancia OSA y
+<code>max_dist = 1</code> por defecto. La columna
+<code>distancia_epiteto</code> describe la distancia de la etapa difusa
+o el valor cero para un epíteto exacto; es <code>NA</code> para una
+variante de terminación.</p>
+</div>
+<div id="empates-y-nombres-aceptados" class="section level2">
+<h2>Empates y nombres aceptados</h2>
+<p>Los empates no resueltos se marcan <code>ambiguo</code>. Sus
+candidatos se conservan en el atributo
+<code>candidatos_ambiguos</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">attr</span>(resultado, <span class="st">&quot;candidatos_ambiguos&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;7&quot;  &quot;8&quot;  &quot;10&quot;</code></pre>
+<p>Cuando varios registros de referencia comparten un binomio, se
+compara la autoría ignorando espacios y mayúsculas. Si no se distingue
+un único registro, el caso queda ambiguo. Un binomio único con autoría
+diferente conserva la coincidencia y registra
+<code>autor_coincide = FALSE</code>.</p>
+<p>Si la referencia proporciona identificadores, la función sigue
+<code>accepted_plant_name_id</code> y devuelve
+<code>nombre_aceptado</code> cuando puede resolver ese registro. Los
+nombres aceptados son resultados de la referencia, no ediciones
+automáticas de la lista de SERFOR.</p>
+</div>
+<div id="corrida-incluida-con-wcvp" class="section level2">
+<h2>Corrida incluida con WCVP</h2>
+<p>Con <code>wcvpdata</code> 0.7.0 (WCVP versión 16, junio de 2026), 730
+de 734 entradas recibieron coincidencia: 728 binomios exactos, un
+epíteto difuso y una variante de terminación. Dos quedaron ambiguas
+(registros 9 y 218) y dos sin coincidencia (33 y 385). Revise también
+las coincidencias no exactas 406 y 674, y las filas con
+<code>autor_coincide = FALSE</code>.</p>
+<p>El flujo se inspira en <a href="https://github.com/PaulESantos/wcvpmatch"><code>wcvpmatch</code></a>
+y usa <a href="https://github.com/dgrtwo/fuzzyjoin"><code>fuzzyjoin</code></a>
+para las comparaciones difusas.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

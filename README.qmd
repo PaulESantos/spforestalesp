@@ -1,0 +1,171 @@
+---
+format: gfm
+---
+
+<!-- README.md is generated from README.qmd. Edit this file and render it with quarto. -->
+
+# spforestalesp
+
+`spforestalesp` contiene 734 registros de la Lista Oficial de Especies
+Forestales de SERFOR, Perú. Cada registro conserva el nombre científico
+original y separa género, epíteto específico y autoría. El paquete también
+concilia esos nombres con una referencia taxonómica, incluida WCVP mediante
+`wcvpdata`.
+
+## Instalación
+
+Desde la raíz del proyecto:
+
+```r
+install.packages(c("fuzzyjoin", "tibble"))
+install.packages(".", repos = NULL, type = "source")
+```
+
+Para usar WCVP como referencia predeterminada:
+
+```r
+install.packages(
+  "wcvpdata",
+  repos = c("https://paulesantos.r-universe.dev", "https://cloud.r-project.org")
+)
+```
+
+También puede proporcionar un `data.frame` propio con las columnas `genus` y
+`species`; en ese caso no necesita `wcvpdata`.
+
+## Datos de SERFOR
+
+```r
+library(spforestalesp)
+data("lista_oficial_especies_forestales")
+
+lista_oficial_especies_forestales[
+  1:3, c("numero", "especie", "genero", "epiteto_especifico", "autor")
+]
+```
+
+El tibble tiene ocho columnas: `numero`, `especie`, `genero`,
+`epiteto_especifico`, `autor`, `familia`, `nombre_comun` y `nombre_comercial`.
+Las marcas `S.I.`, `N.D.` y `No registra` se representan como `NA` en las
+columnas de nombres comunes y comerciales. El archivo fuente es
+`raw-data/lista_oficial_especies_forestales.md`; se regenera con
+`data-raw/crear_lista_oficial_especies_forestales.R`.
+
+## Datos modelo para evaluar el paquete
+
+Tres tibbles sintéticos permiten probar la conciliación sin descargar WCVP:
+`serfor_modelo` contiene 12 entradas, `referencia_modelo` contiene 14
+registros de referencia y `resultado_modelo_esperado` contiene los resultados
+esperados. Incluyen duplicados, coincidencias exactas y difusas, una variante
+de terminación, un sinónimo, empates y nombres ausentes.
+
+```r
+data("serfor_modelo")
+data("referencia_modelo")
+data("resultado_modelo_esperado")
+
+resultado_modelo <- conciliar_especies_serfor(
+  serfor_modelo, referencia_modelo
+)
+columnas <- c("estado_coincidencia", "metodo_coincidencia",
+              "id_referencia", "nombre_aceptado")
+all(vapply(columnas, function(columna) {
+  identical(resultado_modelo[[columna]],
+            resultado_modelo_esperado[[columna]])
+}, logical(1)))
+#> TRUE
+```
+
+Los datos se regeneran con `source("data-raw/crear_datos_modelo.R")` desde la
+raíz del proyecto. La viñeta `metodologia-conciliacion` explica cada caso.
+
+## Conciliación taxonómica
+
+Este ejemplo usa dos registros reales de SERFOR y una referencia pequeña
+incluida en el código. Se puede ejecutar sin `wcvpdata`:
+
+```r
+library(spforestalesp)
+data("lista_oficial_especies_forestales")
+
+serfor_ejemplo <- lista_oficial_especies_forestales[
+  lista_oficial_especies_forestales$numero %in% c(1L, 406L),
+]
+referencia_ejemplo <- data.frame(
+  genus = c("Abarema", "Moquilea"),
+  species = c("acreana", "magnifructa")
+)
+
+resultado <- conciliar_especies_serfor(
+  serfor = serfor_ejemplo,
+  target_df = referencia_ejemplo,
+  max_dist = 1L
+)
+resultado[c("numero", "especie", "epiteto_coincidente",
+            "metodo_coincidencia", "distancia_epiteto")]
+```
+
+El registro 1 coincide exactamente con `Abarema acreana`. El registro 406,
+`Moquilea magnifruta`, se vincula con `Moquilea magnifructa` mediante una
+distancia de edición de 1 en el epíteto. Ambos nombres originales permanecen
+en la columna `especie`.
+
+Con `wcvpdata` instalado, la función usa WCVP y los 734 registros del paquete
+por defecto:
+
+```r
+resultado_wcvp <- conciliar_especies_serfor()
+table(resultado_wcvp$estado_coincidencia,
+      resultado_wcvp$metodo_coincidencia, useNA = "ifany")
+```
+
+La función prueba el binomio exacto, después el género difuso con epíteto
+exacto, las variantes de terminación y, finalmente, el epíteto difuso dentro
+del género. Usa `fuzzyjoin` para las dos etapas difusas. Devuelve una fila por
+registro de SERFOR, con método, distancias, estado y datos taxonómicos cuando
+la referencia los ofrece. Los empates se marcan como `ambiguo`; sus candidatos
+quedan en `attr(resultado, "candidatos_ambiguos")`. Los nombres aceptados se
+informan solo cuando pueden resolverse mediante identificadores de la
+referencia. Consulte la viñeta `metodologia-conciliacion` para los criterios
+de revisión.
+
+## Resultado con WCVP
+
+La ejecución incluida usa `wcvpdata` 0.7.0 (WCVP versión 16, junio de 2026)
+con distancia OSA máxima de 1. Produce estos archivos:
+
+- [Tibble RDS](results/conciliacion_serfor_wcvp.rds), que conserva los candidatos ambiguos.
+- [Tabla CSV](results/conciliacion_serfor_wcvp.csv), para revisión fuera de R.
+
+| Resultado | Registros |
+| --- | ---: |
+| Binomio exacto | 728 |
+| Epíteto difuso | 1 |
+| Variante de terminación | 1 |
+| Ambiguo | 2 |
+| Sin coincidencia | 2 |
+
+Reproduzca los archivos desde la raíz del proyecto con
+`source("data-raw/ejecutar_con_wcvp.R")` después de instalar el paquete. La
+conciliación detecta posibles equivalencias; revise los casos ambiguos y las
+coincidencias no exactas antes de modificar la lista oficial.
+
+La secuencia de búsqueda se adaptó de
+[`wcvpmatch`](https://github.com/PaulESantos/wcvpmatch). Las comparaciones
+difusas usan [`fuzzyjoin`](https://github.com/dgrtwo/fuzzyjoin).
+
+## Sitio del paquete
+
+El sitio de documentación se construye localmente con `pkgdown` en `docs/`.
+Desde la raíz del proyecto:
+
+```r
+# Instale pkgdown si hace falta: install.packages("pkgdown")
+# Primero ejecute en la terminal: quarto render README.qmd --to gfm
+source("data-raw/construir_sitio.R")
+```
+
+Abra `docs/index.html` para revisar la página inicial, la referencia de la
+función y los datos, y la viñeta de metodología. `_pkgdown.yml` incluye una
+dirección propuesta para GitHub Pages; la construcción local no publica el
+sitio.
