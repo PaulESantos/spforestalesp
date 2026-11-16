@@ -165,6 +165,11 @@ Desde la raíz del proyecto:
 source("data-raw/construir_sitio.R")
 ```
 
+El script llama `pkgdown::build_site_github_pages(install = TRUE)`: la viñeta
+ejecuta `library(spforestalesp)` y necesita que el paquete esté instalado en
+la biblioteca temporal de la compilación. Si ejecuta `pkgdown` directamente,
+use también `install = TRUE`.
+
 Abra `docs/index.html` para revisar la página inicial, la referencia de la
 función y los datos, y la viñeta de metodología. `_pkgdown.yml` incluye una
 dirección propuesta para GitHub Pages; la construcción local no publica el

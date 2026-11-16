@@ -1,7 +1,9 @@
 # Ejecutar desde la raíz del proyecto después de renderizar README.qmd
 # con: quarto render README.qmd --to gfm
 
-pkgdown::build_site(preview = FALSE)
+# build_site_github_pages() no instala el paquete por defecto. La viñeta
+# ejecuta library(spforestalesp), por lo que se requiere install = TRUE.
+pkgdown::build_site_github_pages(install = TRUE, new_process = FALSE)
 
 archivos <- c(
   "results/conciliacion_serfor_wcvp.rds",
